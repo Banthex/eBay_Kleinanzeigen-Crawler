@@ -4,3 +4,6 @@ venv/**
 # python #
 **/__pycache__/**
 *.pyc
+
+# dumps #
+**/dumps/**
