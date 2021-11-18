@@ -23,6 +23,3 @@ def get_proxy():
         get_proxy()
     prox = proxies[proxy_num]
     return prox
-
-print(__parse_proxies())
-print(get_proxy())
