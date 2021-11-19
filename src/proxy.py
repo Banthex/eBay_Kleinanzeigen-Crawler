@@ -22,4 +22,5 @@ def get_proxy():
     else:
         get_proxy()
     prox = proxies[proxy_num]
+    print('Proxy:',prox)
     return prox
