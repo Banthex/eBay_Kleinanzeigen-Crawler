@@ -10,17 +10,15 @@ def __parse_proxies():
     proxies = list()
     for i in parser.xpath('//tbody/tr')[:100]:
         if i.xpath('.//td[7][contains(text(),"yes")]') and i.xpath('.//td[5][contains(text(),"elite proxy")]'):
-            proxy = ":".join([i.xpath('.//td[1]/text()')[0], i.xpath('.//td[2]/text()')[0]])
+            proxy = ":".join([i.xpath('.//td[1]/text()')[0].strip(), i.xpath('.//td[2]/text()')[0].strip()])
             proxies.append(proxy)
     return proxies
 
 def get_proxy():
     proxies = __parse_proxies()
-    proxy_pool = cycle(proxies)
     if len(proxies) >0:
         proxy_num = randint(0, len(proxies)-1)
     else:
         get_proxy()
     prox = proxies[proxy_num]
-    print('Proxy:',prox)
     return prox

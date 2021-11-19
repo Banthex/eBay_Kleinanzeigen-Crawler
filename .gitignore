@@ -8,3 +8,6 @@ venv/**
 # output #
 **/dump/**
 **/data/**
+
+# vscode #
+**/.vscode/**
