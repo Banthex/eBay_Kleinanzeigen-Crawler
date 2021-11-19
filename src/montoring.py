@@ -99,7 +99,7 @@ class montioring:
 
     def __dump_content(self, response:requests.Response):
         file = self.json_pref + '_' + datetime.now().strftime('%H_%M_%S_%d_%m_%Y') + '.json'
-        if not os.path.isdir('new_folder'):
+        if not os.path.isdir(self.output_folder):
             os.mkdir(self.output_folder)
         with open(file=self.output_folder + file, mode='w', encoding=self.__ENCODING) as f:
             f.write(json.dumps(self.__parse_content(response), sort_keys=True, indent=4, ensure_ascii=False))
