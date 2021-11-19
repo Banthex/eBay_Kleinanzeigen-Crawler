@@ -9,7 +9,7 @@ from deepdiff import DeepDiff
 import re
 import os
 
-class montioring:
+class monitoring:
     __HEADER = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'}
     __ENCODING = 'utf8'
     __BASE_URL = 'https://www.ebay-kleinanzeigen.de'
@@ -21,7 +21,7 @@ class montioring:
         self.output_folder = parser_args.output_folder
         self.proxy = parser_args.proxy
         self.sleep = parser_args.sleep
-        self.saved_response = ''
+        self.saved_response = 'Init response - Empty'
         self.start_monitoring()
 
     def __response(self,) -> requests.Response:
@@ -39,16 +39,16 @@ class montioring:
     def __hash_response(self, response:requests.Response) -> str:
         return hashlib.sha256(json.dumps(self.__parse_content(response)).encode(self.__ENCODING)).hexdigest()
 
-    def __init_hash(self):
-        global __response_saved
-        for i in range(5):
-            response = self.__response()
-            if(self.__call_succesfull(response)):
-                if self.output_json:
-                    self.__dump_content(response)
-                self.saved_response = response
-                return self.__hash_response(response)
-        return False, response
+    #def __init_hash(self):
+    #    global __response_saved
+    #    for i in range(5):
+    #        response = self.__response()
+    #        if(self.__call_succesfull(response)):
+    #            if self.output_json:
+    #               self.__dump_content(response)
+    #            self.saved_response = response
+    #            return self.__hash_response(response)
+    #    return False, response
 
     def __parse_content(self, response:requests.Response) -> dict:
         results = dict()
@@ -119,7 +119,10 @@ class montioring:
                     diff = DeepDiff(self.__parse_content(self.saved_response),new_dict,ignore_order=True)
                     try:
                         for dif in re.findall("aditem_\d+",str(diff['dictionary_item_added'])):
-                            print(new_dict[str(dif)]['Article_link'])
+                            print('Added: ' + new_dict[str(dif)]['Article_link'])
+                            print(new_dict[str(dif)]['Article_price'])
+                        for dif in re.findall("aditem_\d+",str(diff['values_changed'])):
+                            print('Changed: ' + new_dict[str(dif)]['Article_link'])
                             print(new_dict[str(dif)]['Article_price'])
                     except KeyError as e:
                         pass
@@ -128,11 +131,6 @@ class montioring:
                 if self.output_json:
                     self.__dump_content(res)
                     
-
     def start_monitoring(self):
-        init_hash = self.__init_hash()
-        if not init_hash:
-            print('Monitoring failed! Url:', self.url)
-            return False
-        self.__monitoring(init_hash)
+        self.__monitoring('0x1')
 
