@@ -7,16 +7,18 @@ from bs4 import BeautifulSoup
 import json
 from deepdiff import DeepDiff
 import re
+import os
 
 class montioring:
     __HEADER = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36'}
-    __DUMP_FOLDER = 'dump/'
     __ENCODING = 'utf8'
     __BASE_URL = 'https://www.ebay-kleinanzeigen.de'
 
     def __init__(self,parser_args) -> None:
         self.url = parser_args.url
-        self.json_dump = parser_args.json_dump
+        self.output_json = parser_args.output_json
+        self.json_pref = parser_args.json_pref
+        self.output_folder = parser_args.output_folder
         self.proxy = parser_args.proxy
         self.sleep = parser_args.sleep
         self.saved_response = ''
@@ -42,7 +44,7 @@ class montioring:
         for i in range(5):
             response = self.__response()
             if(self.__call_succesfull(response)):
-                if self.json_dump:
+                if self.output_json:
                     self.__dump_content(response)
                 self.saved_response = response
                 return self.__hash_response(response)
@@ -96,8 +98,10 @@ class montioring:
         return results
 
     def __dump_content(self, response:requests.Response):
-        file = datetime.now().strftime('%H_%M_%S_%d_%m_%Y') + '.json'
-        with open(file=self.__DUMP_FOLDER + file, mode='w', encoding=self.__ENCODING) as f:
+        file = self.json_pref + '_' + datetime.now().strftime('%H_%M_%S_%d_%m_%Y') + '.json'
+        if not os.path.isdir('new_folder'):
+            os.mkdir(self.output_folder)
+        with open(file=self.output_folder + file, mode='w', encoding=self.__ENCODING) as f:
             f.write(json.dumps(self.__parse_content(response), sort_keys=True, indent=4, ensure_ascii=False))
         
 
@@ -121,7 +125,7 @@ class montioring:
                         pass
                     init_hash = new_hash
                     self.saved_response = res
-                if self.json_dump:
+                if self.output_json:
                     self.__dump_content(res)
                     
 
