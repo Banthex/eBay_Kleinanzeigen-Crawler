@@ -27,6 +27,8 @@ options:
  ```
 
 ## Example
-
+```
+py Main.py --url https://www.ebay-kleinanzeigen.de/s-pc-zubehoer-software/grafikkarten/anzeige:angebote/gtx/k0c225+pc_zubehoer_software.art_s:grafikkarten
+```
 ![Example](./doc/Example.png)
 
