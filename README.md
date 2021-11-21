@@ -28,5 +28,5 @@ options:
 
 ## Example
 
-![](doc\Example.png)
+![Example](./doc/Example.png)
 
