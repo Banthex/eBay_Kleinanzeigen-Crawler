@@ -23,6 +23,8 @@ class monitoring:
         self.output_folder = parser_args.output_folder
         self.proxy = parser_args.proxy
         self.sleep = parser_args.sleep
+        Logger.level = parser_args.log_level
+        Logger.date_format = parser_args.log_date_format
         self._cache_size = parser_args.cache
         self._cache = cache(self._cache_size)
         self._saved_hash = list()
@@ -115,6 +117,8 @@ class monitoring:
                     Logger.changed(str(i))
             if self.output_json:
                 self.__dump_content()
+        else:
+            Logger.info('No changes!')
         self._saved_hash = new_hash
     
     def __monitoring(self):

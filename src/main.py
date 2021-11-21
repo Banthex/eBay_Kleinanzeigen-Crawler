@@ -14,6 +14,8 @@ def get_args():
     parser.add_argument('--proxy',type=int, required=False, default=0, help='Use proxy')
     parser.add_argument('--sleep',type=int,required=False,default=25,help='Time (secs) between requests')
     parser.add_argument('--cache',type=int,required=False,default=50,help='Cache size')
+    parser.add_argument('--log_level',type=int,required=False,default=0,help='Log level')
+    parser.add_argument('--log_date_format',type=str,required=False,default='%H:%M',help='Logger date format')
     return parser.parse_args()
 
 if __name__ == '__main__':
