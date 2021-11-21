@@ -11,3 +11,6 @@ venv/**
 
 # vscode #
 **/.vscode/**
+
+# Script #
+**/_Scripte/**

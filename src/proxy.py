@@ -16,15 +16,19 @@ def __parse_proxies():
             proxies.append(proxy)
     return proxies
 
-def _proxy_test(proxy):
-    return requests.get('https://www.google.com/', headers=_HEADER, proxies={'http://':'http://'+proxy, 'https://':'https://'+proxy}).status_code < 400
+def _proxy_test(proxies):
+    with requests.get('http://www.google.com', proxies=proxies, timeout=0.5, stream=True) as r:
+            if r.raw.connection.sock:
+                if r.raw.connection.sock.getpeername()[0] == proxies['https'].split(':')[1][2:]:
+                    return proxies
 
 def get_proxy():
     while True:
         proxies = __parse_proxies()
         if len(proxies) >0:
             proxy = proxies[randint(0, len(proxies)-1)]
-            if _proxy_test(proxy):
+            proxies={'http':'http://'+proxy, 'https':'https://'+proxy}
+            if _proxy_test(proxies):
                 return proxy
             else:
                 print('Proxy not working') 
