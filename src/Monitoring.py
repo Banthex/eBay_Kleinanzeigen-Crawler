@@ -32,8 +32,8 @@ class monitoring:
 
     def __response(self,) -> requests.Response:
         if self.proxy:
-            proxy = get_proxy()
-            res = requests.get(url=self.url, headers=self.__HEADER, proxies={'http://':'http://'+proxy, 'https://':'https://'+proxy}, allow_redirects=True)
+            proxies = get_proxy()
+            res = requests.get(url=self.url, headers=self.__HEADER, proxies=proxies, allow_redirects=True)
         else:
             res = requests.get(url=self.url, headers=self.__HEADER)
         res.encoding = self.__ENCODING

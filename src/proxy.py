@@ -1,6 +1,5 @@
 from lxml.html import fromstring
 import requests
-from itertools import cycle
 from random import randint
 
 _HEADER = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'}
@@ -29,6 +28,6 @@ def get_proxy():
             proxy = proxies[randint(0, len(proxies)-1)]
             proxies={'http':'http://'+proxy, 'https':'https://'+proxy}
             if _proxy_test(proxies):
-                return proxy
+                return proxies
             else:
                 print('Proxy not working') 

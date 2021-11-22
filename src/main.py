@@ -1,5 +1,4 @@
 import argparse
-from re import T
 from Monitoring import monitoring
 
 def main():
