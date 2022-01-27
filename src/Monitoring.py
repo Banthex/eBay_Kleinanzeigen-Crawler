@@ -4,6 +4,7 @@ import time
 from bs4 import BeautifulSoup
 import json
 import os
+import re
 from Item import item
 from Cache import cache
 import Logger
@@ -84,7 +85,9 @@ class monitoring:
                 
                 address = i.find('div', attrs= {'class': 'aditem-main--top--left'})
                 if address:
-                    aditem.set_address(address.get_text().strip().replace('\n',' '))
+                    address = address.get_text().strip().replace('\n',' ')
+                    address = re.sub('\s{2,}',' ',address)
+                    aditem.set_address(address)
                 
                 tags = i.find_all('span', attrs= {'class': 'simpletag tag-small'})
                 if tags:

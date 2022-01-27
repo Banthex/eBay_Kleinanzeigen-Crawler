@@ -72,7 +72,7 @@ class item:
         return False
 
     def __str__(self) -> str:
-        return str(self._name) + ' - ' + str(self._price) + '\n' + str(self._link)
+        return str(self._name) + ' - ' + str(self._address) + ' - ' + str(self._price) +'\n' + str(self._link)
 
     def __hash__(self) -> int:
         return hash(str(self._id) + str(self._address) + str(self._date) + str(self._desc) + \
