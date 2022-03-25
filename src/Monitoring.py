@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import json
 import os
 import re
+import html
 from Item import item
 from Cache import cache
 import Logger
@@ -27,6 +28,7 @@ class monitoring:
         Logger.level = parser_args.log_level
         Logger.date_format = parser_args.log_date_format
         self._cache_size = parser_args.cache
+        self._notif_sound = parser_args.sound
         self._cache = cache(self._cache_size)
         self._saved_hash = list()
         self.start_monitoring()
@@ -49,12 +51,12 @@ class monitoring:
     def __parse_content(self, response:requests.Response) -> list:
         soup = BeautifulSoup()
         try:
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = BeautifulSoup(html.unescape(response.text), 'html.parser')
         except AttributeError as e:
             print(e, 'Response: ',response)
         items = soup.find_all('article', attrs= {'class': 'aditem'})
         aditem:item = None
-        aditems = list()
+        aditems:list = list()
         for i in items:
             sponsored = i.find('i', attrs={'class','icon icon-smaller icon-feature-topad'})
             if sponsored:
@@ -95,8 +97,8 @@ class monitoring:
                     for t in range(len(tags)):
                         tag_dict['Tag_'+str(t)] = tags[t].get_text().strip().replace('\n',' ')
                     aditem.set_tags(tag_dict)
-                aditems.append(aditem)  
-        return aditems
+                aditems.append(aditem) 
+        return aditems[::-1]
 
     def __dump_content(self):
         file = self.file_name + '.json'
@@ -115,9 +117,13 @@ class monitoring:
                 if l_item == None:
                     self._cache.add(i)
                     Logger.added(str(i))
+                    if self._notif_sound:
+                        print("\a")
                 elif l_item.get_price() != i.get_price() :
                     self._cache.replace(l_item, i)
                     Logger.changed(str(i))
+                    if self._notif_sound:
+                        print("\a")
             if self.output_json:
                 self.__dump_content()
         else:
