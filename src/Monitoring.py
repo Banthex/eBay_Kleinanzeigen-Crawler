@@ -1,5 +1,5 @@
 import requests
-from Proxy import get_proxy
+from proxy import get_proxy
 import time
 from bs4 import BeautifulSoup
 import json
